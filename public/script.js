@@ -186,7 +186,7 @@ const share =() =>{
   alert('Copied');
  }
  //msg sen from user
-let text = $('input');
+let text = $("#chat_message");
 
 $('html').keydown((e) =>{
   if(e.which == 13 && text.val().length !== 0){
