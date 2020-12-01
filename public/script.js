@@ -13,7 +13,7 @@ let YourName = prompt('Type Your Name');
 
 var peer = new Peer(undefined,{   //we undefine this because peer server create it's own user it
   path: '/peerjs',
-  port: 443,
+  port: 3000,
   host:'/'
   //path: '/peerjs',
 	//host: '/',
@@ -66,6 +66,7 @@ peer.on('open', async id =>{
 
 socket.on('user-disconnected', userId =>{   //userdisconnected so we now ready to stopshare 
       if(peers[userId]) peers[userId].close();
+	  setEmptyParticipant();
       //console.log('user ID fetch Disconnect: '+ userId); 
               //by this fuction which call user to stop share
 }); 
@@ -88,11 +89,13 @@ const connectToNewUser = (userId, stream) =>{
       console.log(currentPeer);
 }
 
-function addVideoStream(video, stream) {
-  video.srcObject = stream
+const addVideoStream = (video, stream) =>{      //this help to show and append or add video to user side
+  video.srcObject = stream;
+  video.controls = true;
   video.addEventListener('loadedmetadata', () => {
-    video.play()
-  })
+    video.play();
+  });
+  //videoGrid.append(video);
   
   if(videoGrid.firstElementChild == null) {
 	  videoGrid.append(video);
@@ -102,6 +105,7 @@ function addVideoStream(video, stream) {
 	  participant.innerHTML = "";
 	  participant.append(video);
   }
+  setEmptyParticipant();
 }
 
 function getEmptyParticipantIndex() {
@@ -111,6 +115,17 @@ function getEmptyParticipantIndex() {
 		if(participant.firstElementChild == null) {
 			return i;
 			break;
+		}
+	}
+}
+
+function setEmptyParticipant() {
+	var allParticipants = document.getElementsByClassName("participant");
+	for(var i=0; i<allParticipants.length; i++) {
+		var participant = allParticipants[i];
+		if(participant.firstElementChild == null) {
+			var n = Number(i)+Number(1);
+			participant.innerHTML = "Student " + n;
 		}
 	}
 }
